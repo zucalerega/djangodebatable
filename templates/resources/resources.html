@@ -1,0 +1,10 @@
+{% extends 'profiles/base.html' %}
+{% block content%}
+{%for resource in resources%}
+  <p>{{resource.title}}
+  <p>{{resource.author}}
+  <p>{{resource.content}}
+  <p>{{resource.published}}
+  <p>{{resource.uses}}
+{% endfor %}
+{%endblock%}
