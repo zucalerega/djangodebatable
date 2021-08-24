@@ -47,7 +47,6 @@ def profile_list_view(request):
 # 	return render(request, "profiles/profile_create.html", context)
 
 def profile_create_view(request, id):
-	obj = Profile.objects.get(id=id)
 	print(request.user)
 
 	form = ProfileForm(request.POST or None, instance=obj)

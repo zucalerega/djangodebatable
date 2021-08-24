@@ -1,13 +1,21 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .models import Post
+from .models import Post, Like
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
-
+from users.models import Follow
 
 # Create your views here.
 
+def feed_view(request):
+    basic_suggestions = []
+    for i in Follow.objects.filter(follower = request.user):
+        for j in Post.objects.filter(author = i.following):
+            basic_suggestions.insert(0, [j, (len(Like.objects.filter(post=j, action=True))- len(Like.objects.filter(post=j, action=False)))])
+    context = {"basic_suggestions": basic_suggestions}
+
+    return render(request, "posts/feed.html", context)
 
 class PostListView(ListView):
     model=Post
@@ -63,3 +71,10 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user==post.author:
             return True
         return False
+
+def like_view(request, username="null"):
+    if len(Like.objects.filter(actor=request.user, post=Post.objects.get(id=request.POST['post-title']), action=request.POST['action'])) == 0:
+        like = Like.objects.create(actor=request.user, post=Post.objects.get(id=request.POST['post-title']), action=request.POST['action'])
+    else:
+        Like.objects.get(actor=request.user, post=Post.objects.get(id=request.POST['post-title']), action=request.POST['action']).delete()
+    return redirect(request.META['HTTP_REFERER'])

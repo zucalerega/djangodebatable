@@ -3,13 +3,15 @@ from datetime import datetime
 from django.utils import timezone
 from django.urls import reverse
 from django.contrib.auth.models import User
-
+import random
+import string
 # Create your models here.
 class Room(models.Model):
     name = models.CharField(max_length=1000)
     auo = models.CharField(max_length=25, null=True)
-    aut = models.CharField(max_length=25, null=True)
+    aut = models.CharField(max_length=1000, null=True)
     topic = models.CharField(max_length=25, null=True)
+    group_room = models.BooleanField(default=False)
     def get_absolute_url(self):
         return reverse("chat:room", kwargs={"name": self.name})
 

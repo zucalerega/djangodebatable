@@ -13,3 +13,8 @@ class Post(models.Model):
         return self.title
     def get_absolute_url(self):
         return reverse('posts:post-detail', kwargs={'pk':self.pk})
+
+class Like(models.Model):
+    actor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actor')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post')
+    action = models.BooleanField()

@@ -55,7 +55,7 @@ button.btn.btn-outline-primary {
 }
 
 button.btn.btn-outline-primary:hover {
-  color: white;
+  color: #f5f5f5;
   background-color: #8219E8;
 }
 
@@ -93,7 +93,7 @@ a.user:hover {
   text-decoration: none;
   cursor: pointer;
 }
-.d-flex.flex-column.align-items-stretch.flex-shrink-0.bg-white {
+.d-flex.flex-column.align-items-stretch.flex-shrink-0 {
   position: fixed;
   left: 0;
   top: 5vw;
@@ -140,7 +140,7 @@ box-sizing: border-box;
   padding: 20px;
 }
 
-.d-flex.flex-column.align-items-stretch.flex-shrink-0.bg-white {
+.d-flex.flex-column.align-items-stretch.flex-shrink-0 {
   top: 5vw;
   height: 100vh;
 
@@ -155,6 +155,7 @@ li.list-group-item.d-flex.justify-content-between.align-items-center.flex-wrap {
   background-color: #f2f2f2;
   border-radius: 0;
   border-left: 0px solid blue;
+  box-shadow: 0px 2px 8px 0px rgba(0,0,0,0.2);
 
 }
 #display {
@@ -185,10 +186,9 @@ a:hover {
   position: fixed;
   bottom: 0;
   right: 15vw;
-  max-width: 60vw;
+  max-width: 55vw;
   border-radius: 0;
   padding: 20px;
-  background-color: #f2f2f2;
 
 }
 input.btn.btn-primary {
@@ -197,7 +197,7 @@ input.btn.btn-primary {
 
 </style>
 <body>
-  <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white" style="width: 25vw;">
+  <div class="d-flex flex-column align-items-stretch flex-shrink-0" style="width: 25vw;">
       <a href="{% url 'chat:chathome' %}" class="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom">
         <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
         <span class="fs-5 fw-semibold">Your Ongoing Discussions</span>
@@ -205,9 +205,9 @@ input.btn.btn-primary {
 
       <div class="list-group list-group-flush border-bottom scrollarea">
         {%for key, value in message_list.items%}
-        <a href="{% url 'chat:room' key.name %}" class="list-group-item list-group-item-action py-3 lh-tight" {%if key.name == room%} style="background-color: #8219E8; color:white;"{%endif%}>
+        <a href="{% url 'chat:room' key.name %}" class="list-group-item list-group-item-action py-3 lh-tight" {%if key.name == room%} style="background-color: #8219E8; color:#f5f5f5;"{%endif%}>
           <div class="d-flex w-100 align-items-center justify-content-between">
-            <strong class="mb-1">Discussion with {%if request.user.username == key.auo %}{{key.aut}}{%else%}{{key.auo}}{%endif%}</strong>
+            <strong class="mb-1">{%if key.group_room != True%}Discussion with {%if request.user.username == key.auo %}{{key.aut}}{%else%}{{key.auo}}{%endif%}{%else%}Group discussion about {{key.topic}}{%endif%}</strong>
             <small class='text-muted'>{{value.date.0}}{{value.date.1}}{{value.date.2}}</small>
           </div>
           <div class="col-10 mb-1 small">{% if value == 'No messages yet'%}Click here to discuss!{%else%}{{value.value}}{%endif%}</div>
@@ -265,7 +265,8 @@ window.onclick = function(event) {
 }
 </script>
   <div id="display">
-
+    <p>Type anything in the message box to chat!</p>
+    <small>Your topic is {{room_details.topic}}. You can say whatever you want, but try to stay on topic!</small>
   <!-- <div class="container darker">
     <b>Tom</b><p>Hello Everyone, How Are You Guys Doing?</p>
     <span class="time-left">20th, April 2021</span>
@@ -328,7 +329,7 @@ window.onclick = function(event) {
         padding: 20px;
       }
 
-      .d-flex.flex-column.align-items-stretch.flex-shrink-0.bg-white {
+      .d-flex.flex-column.align-items-stretch.flex-shrink-0 {
         top: 0;
         height: 100vh;
 
@@ -389,8 +390,8 @@ window.onclick = function(event) {
           <input type="hidden" name="username" id="username" value="{{username}}"/>
           <input type="hidden" name="username" id="username" value="{{username}}"/>
           <input type="hidden" name="room_id" id="room_id" value="{{room_details.id}}"/>
-          <input type="text" name="message" id="message" placeholder="Message {{opponent.user.username}}"/>
-          <input class="btn btn-primary" id="rating-submit" type="submit" value="Send" />
+          <input type="text" name="message" id="message" placeholder="Message {{opponent.user.username}} about {{room_details.topic}}"/>
+          <input class="btn btn-primary" id="rating-submit" type="submit" value="Send"/>
       </form>
   </div>
 

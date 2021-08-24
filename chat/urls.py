@@ -10,6 +10,7 @@ urlpatterns = [
     path('send', views.send, name='send'),
     path('getMessages/<str:room>/', views.getMessages, name = 'getMessages'),
     path('<str:room>/rateview', views.rateview, name = 'rateview'),
-    path('<str:room>/report', views.report, name = 'report')
+    path('<str:room>/report', views.report, name = 'report'),
+    path('<str:room>/leaveview', views.leaveview, name = 'leaveview')
 
 ]
